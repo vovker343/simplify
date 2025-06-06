@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head></head>
+    <body>
+        <div style="display:grid;">
+            <label for="os">Original length: <span id="ol"></span></label>
+            <textarea id="os" style="height: 150px; resize: none; "></textarea>
+            <label for="ss">Simplified length: <span id="sl"></span></label>
+            <textarea id="ss" style="height: 150px; resize: none;" readonly=true></textarea>
+        </div>
+    </body>
+    <script>
+        const d = document.getElementById("os");
+        const f = document.getElementById("ol");
+        const g = document.getElementById("ss");
+        const h = document.getElementById("sl");
+        let sol = "";
+        let ssol = "";
+        let ol = 0;
+        let sl = 0;
+        d.addEventListener("change", e => {
+            if (!/^[RULD 1234567890]+$/.test(d.value)) {return;}
+            sol = d.value;
+            sol = formatSolution(sol);
+            console.log(sol.length)
+            ol = sol.length;
+            ssol = simplify(sol);
+            console.log(ssol.length)
+            sl = ssol.length;
+            f.innerText = ol;
+            g.value = ssol;
+            h.innerText = sl;
+        })
+        const formatSolution = (pattern) => {
+            pattern = pattern.replace(" ","")
+            // Split the pattern into parts (letter + number pairs)
+            const parts = pattern.match(/([A-Za-z]+\d+)|([A-Za-z](?![0-9]))/g) || [];
+            let result = '';
+            
+            for (const part of parts) {
+                // Check if part has digits
+                const digitMatch = part.match(/\d+/);
+                if (digitMatch) {
+                    // Extract letters and count
+                    const letters = part[digitMatch.index-1];
+                    const otherLetters = part.slice(0,digitMatch.index-1);
+                    const count = parseInt(digitMatch[0], 10);
+                    result += otherLetters;
+                    result += letters.repeat(count);
+                } else {
+                    // Single character without number (count = 1)
+                    result += part;
+                }
+            }
+            
+            return result;
+        }
+        const simplify = solution => {
+            let b = 0;
+            while (solution.length != b) {
+                b = solution.length;
+                solution = solution.replace(/RL|LR|UD|DU/g, "");
+            }
+            return solution;
+        }
+    </script>
+</html>
