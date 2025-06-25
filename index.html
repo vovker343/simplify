@@ -3,11 +3,12 @@
     <head></head>
     <body>
         <div style="display:grid;">
-            <label for="os">Original length: <span id="ol"></span></label>
+            <label for="os">Original text</label>
             <textarea id="os" style="height: 150px; resize: none; "></textarea>
-            <label for="ss">Simplified length: <span id="sl"></span></label>
+            <label for="ss">Formatted text</label>
             <textarea id="ss" style="height: 150px; resize: none;" readonly=true></textarea>
         </div>
+        <p>Original length: <span id="ol"></span><br>Simplified length: <span id="sl"></span></p>
     </body>
     <script>
         const d = document.getElementById("os");
@@ -18,17 +19,15 @@
         let ssol = "";
         let ol = 0;
         let sl = 0;
-        d.addEventListener("change", e => {
-            if (!/^[RULD 1234567890]+$/.test(d.value)) {return;}
-            sol = d.value;
-            sol = formatSolution(sol);
-            console.log(sol.length)
-            ol = sol.length;
-            ssol = simplify(sol);
-            console.log(ssol.length)
-            sl = ssol.length;
+        d.addEventListener("input", e => {
+            if (!/^[RULD 1234567890\n]+$/.test(d.value)) {return;}
+            sol = d.value.split("\n");
+            sol = sol.map(formatSolution);
+            ol = sol.map(el => el.length).reduce((acc, el) => acc + el) / sol.length;
+            ssol = sol.map(simplify);
+            sl = ssol.map(el => el.length).reduce((acc, el) => acc + el) / ssol.length;
             f.innerText = ol;
-            g.value = ssol;
+            g.value = ssol.join("\n");
             h.innerText = sl;
         })
         const formatSolution = (pattern) => {
