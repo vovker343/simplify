@@ -21,7 +21,7 @@
         let sl = 0;
         d.addEventListener("input", e => {
             if (!/^[RULD 1234567890\n]+$/.test(d.value)) {return;}
-            sol = d.value.split("\n");
+            sol = d.value.split("\n").filter(el=>el);
             sol = sol.map(formatSolution);
             ol = Math.trunc(sol.map(el => el.length).reduce((acc, el) => acc + el) / sol.length * 1000) / 1000;
             ssol = sol.map(simplify);
