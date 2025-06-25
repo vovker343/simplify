@@ -23,9 +23,9 @@
             if (!/^[RULD 1234567890\n]+$/.test(d.value)) {return;}
             sol = d.value.split("\n");
             sol = sol.map(formatSolution);
-            ol = sol.map(el => el.length).reduce((acc, el) => acc + el) / sol.length;
+            ol = Math.trunc(sol.map(el => el.length).reduce((acc, el) => acc + el) / sol.length * 1000) / 1000;
             ssol = sol.map(simplify);
-            sl = ssol.map(el => el.length).reduce((acc, el) => acc + el) / ssol.length;
+            sl = Math.trunc(ssol.map(el => el.length).reduce((acc, el) => acc + el) / ssol.length * 1000) / 1000;
             f.innerText = ol;
             g.value = ssol.join("\n");
             h.innerText = sl;
